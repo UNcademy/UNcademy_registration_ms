@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import uncademy.uncademy_registration_ms.repositories.SubjectRepository;
+import uncademy.uncademy_registration_ms.exceptions.RegistrationNotFoundException;
 import uncademy.uncademy_registration_ms.models.Subject;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,14 @@ public class SubjectController {
     @PostMapping("/CreateSubject")
     public Subject createSubject(@RequestBody Subject subject){
         return subjectRepository.save(subject);
+    }
+
+    @GetMapping("/Subject/{idSubject}")
+    Subject getSubject(@PathVariable String idSubject){
+        Optional<Subject> data=subjectRepository.findById(idSubject);
+        System.out.println(data.get());
+        return subjectRepository.findById(idSubject)
+        .orElseThrow(() -> new RegistrationNotFoundException("No se encontro materia: " + data.get().getNameSubject()));
     }
 
     @GetMapping("/Subjects")

@@ -10,11 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document
 public class Registration {
 
-
     @Id
     private String idStudent;
     private String idProgram;
-   @Field("idSubject")
+    @Field("idSubject")
 	@DBRef
     private ArrayList<Subject> subjects;
 
@@ -37,13 +36,8 @@ public class Registration {
         this.subjects=subjects;
 
     }
-    public ArrayList<Subject> getSujects(){
+    public ArrayList<Subject> getSubjects(){
         return subjects;
     }
-    @Override
-    public String toString() {
-        return "Registration [ idStudent=" + idStudent + ", subjects=" + subjects + "]";
-    }
-
     
 }

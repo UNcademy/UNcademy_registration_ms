@@ -1,16 +1,11 @@
 package uncademy.uncademy_registration_ms.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
-import lombok.Data;
-
-@Data
-@Document()
+@Document
 public class Subject {
     @Id
     private String idSubject;
@@ -18,70 +13,43 @@ public class Subject {
     private int cupSubject;
     private String days;
     private int time;
-    private ArrayList<String> requirements;/* */
+    private List<String> requirements;
 
-/* 
-   @PersistenceConstructor
-    public Subject(String idSubject, String nameSubject, int codSubject, int cupSubject, String days, int time,
-        ArrayList<String> requirements) {
-    this.idSubject = idSubject;
-    this.nameSubject = nameSubject;
-    this.codSubject = codSubject;
-    this.cupSubject = cupSubject;
-    this.days = days;
-    this.time = time;
-    this.requirements = requirements;
-}
-*/
-
-    public void setIdSubject(String idSubject){
-        this.idSubject=idSubject;
-
-    }
-    public String getIdSubject(){
+    public String getIdSubject() {
         return idSubject;
     }
-    /////////////////////////////////////
-    
-
-    public void setNameSubject(String nameSubject){
-        this.nameSubject=nameSubject;
-
+    public void setIdSubject(String idSubject) {
+        this.idSubject = idSubject;
     }
-    public String getNameSubject(){
+    public String getNameSubject() {
         return nameSubject;
     }
-//////////////////////////////////////////////////
-    public void setCupSubject(int cupSubject){
-        this.cupSubject=cupSubject;
-
+    public void setNameSubject(String nameSubject) {
+        this.nameSubject = nameSubject;
     }
-    public int getCupSubject(){
+    public int getCupSubject() {
         return cupSubject;
     }
-////////////////////////////////////////////////////
-    public void setDaysSubject(String days){
-        this.days=days;
-
+    public void setCupSubject(int cupSubject) {
+        this.cupSubject = cupSubject;
     }
-    public String getDaysSubject(){
+    public String getDays() {
         return days;
     }
-///////////////////////////////////////////////////////
-    public void setTimeSubject(int time){
-        this.time=time;
-
+    public void setDays(String days) {
+        this.days = days;
     }
-    public int getTimeSubject(){
+    public int getTime() {
         return time;
     }
-////////////////////////////////////////////
-     public void setrequirementsSubject(ArrayList<String> requirements){
-        this.requirements=requirements;
-
+    public void setTime(int time) {
+        this.time = time;
     }
-    public ArrayList<String> setrequirementsSubject(){
+    public List<String> getRequirements() {
         return requirements;
+    }
+    public void setRequirements(List<String> requirements) {
+        this.requirements = requirements;
     }
 
     

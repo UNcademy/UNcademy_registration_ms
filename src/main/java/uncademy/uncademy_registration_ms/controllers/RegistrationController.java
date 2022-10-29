@@ -33,7 +33,7 @@ public class RegistrationController {
 
     @PostMapping("/CreateRegistration")
     public Registration createRegistration(@RequestBody Registration registration){
-        
+        registration.getSubjects().clear();
         return registrationRepository.save(registration);
     }
 
@@ -54,64 +54,74 @@ public class RegistrationController {
     @GetMapping("/Registration/{idStudent}")
     Registration getRegistration(@PathVariable String idStudent){
         Optional<Registration> data=registrationRepository.findById(idStudent);
-        System.out.println(data.get());
+        System.out.println(data.get().getSubjects());
         return registrationRepository.findById(idStudent)
         .orElseThrow(() -> new RegistrationNotFoundException("No se encontro un registro: " + idStudent));
-
-
     }
 
-    
+    Subject subject(String id){
+
+        return null;
+    }
 
     @PutMapping("UpdateRegistration/{idStudent}")
     public Registration putRegistration(@PathVariable String idStudent, @RequestBody Registration registration){
-        //id Body
-        //System.out.print("registrationRepository "+registrationRepository.findById(registration.getIdStudent()));
         Optional<Registration> registrationData = registrationRepository.findById(idStudent);
-        
-        
         if(!registrationData.isPresent()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No se encontra la registro con id: "+idStudent);
         }else{
-                Registration _configuracion=registrationData.get();
-                //System.out.println("size inicial: "+registrationData.get().getProgram().contains("100"));
-                //System.out.println("hhhhhhhhhhhhhhhh: "+_configuracion.getProgram());
-                if(registration.getSujects().isEmpty()){
-                    _configuracion.getSujects().clear();
+            Registration _Registration=registrationData.get();
+            if(registration.getSubjects().isEmpty()){
+                _Registration.getSubjects().clear();
+            }else{
 
-                }else{
-                    for (int j=0; j<registration.getSujects().size();j++) { 
-                        if(!registrationData.get().getSujects().contains(registration.getSujects().get(j))) {
-                            String materia=registration.getSujects().toString();
-                            Optional<Subject> subject=subjectRepository.findById(materia);
-                            //System.out.print("materiaaaaaaa "+subject.get().getNameSubject()+" "+subject.get().getCupSubject());
+                ArrayList<String> auxArrayListRegistro=new ArrayList<>();
+                ArrayList<String> auxArrayListData=new ArrayList<>();
+    
+                System.out.println("1 "+auxArrayListData.size()+" "+auxArrayListRegistro.size());
+
+                for (int j=0; j<registration.getSubjects().size();j++) {
+                    auxArrayListRegistro.add(registration.getSubjects().get(j).getIdSubject());
+                }
+                for (int j=0; j<registrationData.get().getSubjects().size();j++) {
+                    auxArrayListData.add(registrationData.get().getSubjects().get(j).getIdSubject());
+                }
+                //System.out.println("1 "+auxArrayListData.size()+" "+auxArrayListRegistro.size());
+                //System.out.println("1 "+registrationData.get().getSubjects().size()+" "+registration.getSubjects().size());
+
+                for (int j=0; j<auxArrayListRegistro.size();j++) {
+                    System.out.println("1 "+auxArrayListData.size()+" "+auxArrayListRegistro.size());
+
+                    System.out.println("1 "+registrationData.get().getSubjects().size()+" "+registration.getSubjects().size());
+
+                   // Optional<Subject> subject=subjectRepository.findById(registration.getSubjects().get(j).getIdSubject());
+                    if(!auxArrayListData.contains(auxArrayListRegistro.get(j))){
+                        String idSubject=auxArrayListRegistro.get(j);
+                        Optional<Subject> subject=subjectRepository.findById(idSubject);
+                        if(!subject.isPresent()){
+                            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No se encontro materia: "+registration.getSubjects().get(j).getNameSubject());
+                        }else{
                             if(subject.get().getCupSubject()>0){
-                                _configuracion.getSujects().add(registration.getSujects().get(j));
+                                _Registration.getSubjects().add(subject.get());
+                                auxArrayListData.add(subject.get().getIdSubject());
                             }else{
-                                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay cupos disṕonibles");
+                                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No hay cupos disṕonibles en materia: "+subject.get().getNameSubject());
                             }
                         }
-
                     }
-
-                    for(int i=0;i<registrationData.get().getSujects().size();i++){
-                        //System.out.println("Dato "+i+" " +registrationData.get().getSujects().get(i));
-                        if(!registration.getSujects().contains(_configuracion.getSujects().get(i))){
-
-                            _configuracion.getSujects().remove(_configuracion.getSujects().get(i));
-                            //System.out.println("SE elimino :  "+registrationData.get().getProgram().get(i));
-                        }
+                }
+                for (int j=0; j<registrationData.get().getSubjects().size();j++){
+                    if(!auxArrayListRegistro.contains(auxArrayListData.get(j))){
+                        _Registration.getSubjects().remove(_Registration.getSubjects().get(j));
                     }
 
 
                 }
-
-               registrationRepository.save(_configuracion);
+            }
+            registrationRepository.save(_Registration);
+            return _Registration;
+        }
         
-                return _configuracion;
-            
-        }        
-
     }
 
 }
